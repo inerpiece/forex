@@ -4,6 +4,12 @@ This project is about creating a basic forum solution. You will be able to creat
 
 Packs that will be utilized in this project: express, joi, bcrypt, mssql (more to be added upon need)
 
+Packs installed so far:
+[x] express
+[x] joi
+[x] bcrypt
+[x] mssql
+
 1. Creating routes
 [] Member routes
 [] Moderator routes

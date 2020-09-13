@@ -1,0 +1,26 @@
+{
+  "name": "forex",
+  "version": "1.0.0",
+  "description": "This project is about creating a basic forum solution. You will be able to create a user. Manage your information. Create posts and comment on others' posts. Multiple roles will be created to manage the forum such as: admins, moderators and members.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inerpiece/forex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/inerpiece/forex/issues"
+  },
+  "homepage": "https://github.com/inerpiece/forex#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "expres": "0.0.5",
+    "joi": "^17.2.1",
+    "mssql": "^6.2.1"
+  }
+}
