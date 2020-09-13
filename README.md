@@ -11,6 +11,10 @@ Packs installed so far:
 [x] mssql
 
 1. Creating routes
+[x] Member routes
+[x] Moderator routes
+[x] Admin routes
+1.1 Defining purpose of routes
 [] Member routes
 [] Moderator routes
 [] Admin routes
