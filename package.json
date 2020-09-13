@@ -19,7 +19,7 @@
   "homepage": "https://github.com/inerpiece/forex#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
-    "expres": "0.0.5",
+    "express": "^4.17.1",
     "joi": "^17.2.1",
     "mssql": "^6.2.1"
   }
