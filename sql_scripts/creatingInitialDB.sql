@@ -15,19 +15,16 @@ CREATE TABLE forexUser (
     userLastName NVARCHAR(50) NOT NULL,
     userUsername NVARCHAR(50) NOT NULL,
     userPhone int,
-    userBirthDay DATE,
-    FK_roleID int NOT NULL,
+    userBirthDay NVARCHAR(50),
 
     PRIMARY KEY (userID),
-
-    CONSTRAINT FK_Role_role FOREIGN KEY (FK_roleID) REFERENCES forexRole(roleID) --this is referencing the role for each user
 );
 
 CREATE TABLE forexPost (
     postID int IDENTITY(1,1) NOT NULL,
     postTitle NVARCHAR(255) NOT NULL,
     postBody NVARCHAR(MAX) NOT NULL,
-    postDate DATE DEFAULT GETDATE(),
+    postDate NVARCHAR(50),
     FK_userID int NOT NULL,
 
     PRIMARY KEY (postID),
@@ -38,7 +35,7 @@ CREATE TABLE forexPost (
 CREATE TABLE forexComment (
     commentID int IDENTITY(1,1) NOT NULL,
     commentBody NVARCHAR(MAX) NOT NULL,
-    commentDate DATE DEFAULT GETDATE(),
+    commentDate NVARCHAR(50),
     FK_userID int NOT NULL,
     FK_postID int NOT NULL,
 
@@ -55,19 +52,51 @@ CREATE TABLE forexPassword (
     CONSTRAINT FK_forexPassword_user FOREIGN KEY (FK_userID) REFERENCES forexUser(userID), --this is referencing the user for each password
 );
 
-SELECT
+/* SELECT
   *
 FROM
   SYSOBJECTS
 WHERE
   xtype = 'U';
-GO
+GO */
 
-/* CREATE TABLE forexUserRole (
+/* SELECT *
+FROM forexUser
+INNER JOIN forexPassword
+ON forexUser.userID = forexPassword.FK_userID
+INNER JOIN forexRole
+ON forexRole.roleID = forexUser.FK_roleID
+WHERE forexUser.userEmail = @userEmail */
+
+CREATE TABLE forexUserRole (
     FK_userID int NOT NULL,
     FK_roleID int NOT NULL,
 
-    CONSTRAINT FK_UserRole_user FOREIGN KEY (FK_userID) REFERENCES forexUser(userID), --this is referencing the user
-    CONSTRAINT FK_UserRole_role FOREIGN KEY (FK_roleID) REFERENCES forexRole(roleID), --this is referencing the role for each user
-); */
+    CONSTRAINT FK_UserRole_forexUser FOREIGN KEY (FK_userID) REFERENCES forexUser(userID), --this is referencing the user
+    CONSTRAINT FK_UserRole_forexRole FOREIGN KEY (FK_roleID) REFERENCES forexRole(roleID), --this is referencing the role for each user
+);
+
+INSERT INTO forexRole (roleName, roleDescription)
+VALUES  ('Admin', 'Can do all sorts of shit'),
+        ('Mod', 'Can do all sorts of shit but less than an Admin'),
+        ('Member', 'Cant do shit')
+
+SELECT *
+FROM forexRole
+
+INSERT INTO forexUser (userEmail, userFirstName, userLastName, userUsername)
+VALUES ('tony@gmail.com', 'Tony', 'Borne', 'toninator')
+
+SELECT *
+FROM forexUser
+
+INSERT INTO forexUserRole (FK_userID, FK_roleID)
+VALUES (1,1)
+
+SELECT userEmail, roleName, userFirstName
+FROM forexUserRole
+INNER JOIN forexUser
+ON forexUser.userID = forexUserRole.FK_userID
+INNER JOIN forexRole
+ON forexRole.roleID = forexUser.userID
 
