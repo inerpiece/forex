@@ -82,6 +82,15 @@ VALUES  ('Admin', 'Can do all sorts of shit'),
         ('Member', 'Cant do shit')
 
 /*
+UPDATE forexUser
+SET userEmail = @userEmail,
+userFirstName = @userFirstName,
+userLastName = @userLastName,
+userUsername = @userUsername,
+userPhone = @userPhone,
+userBirthDay = @userBirthDay,
+WHERE userID = @userID
+
 SELECT *
 FROM forexRole
 

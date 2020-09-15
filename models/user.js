@@ -160,7 +160,7 @@ class User {
             })();
         })
     }
-
+    // GET (READ) stuff
     static readById(userID){
         return new Promise((resolve,reject) =>{
             (async ()=>{
@@ -194,6 +194,56 @@ class User {
                             //roleId: result.recordset[0].roleID,
                             roleName: result.recordset[0].roleName,
                             //roleDescription: result.recordset[0].roleDescription,
+                        }
+                    }
+
+                    const {error} = User.validate(record);
+                    if (error) throw error;
+
+                    resolve(new User(record));
+
+                } catch (err) {
+                    console.log(err);
+                        reject(err);
+                }
+                sql.close();
+            })();
+        })
+    }
+
+    static readByIdAdmin(userID){
+        return new Promise((resolve,reject) =>{
+            (async ()=>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('userID', sql.Int, userID)
+                    .query(`SELECT *
+                            FROM forexUser
+
+                            INNER JOIN forexUserRole
+                            ON forexUser.userID = forexUserRole.FK_userID
+
+                            INNER JOIN forexRole
+                            ON forexUserRole.FK_roleID = forexRole.roleID
+
+                            WHERE forexUser.userID = @userID`);
+                    
+                    console.log(result);
+                    if (!result.recordset[0]) throw {message: 'User doesnt exist'}
+
+                    const record = {
+                        userId: result.recordset[0].userID,
+                        userEmail: result.recordset[0].userEmail,
+                        userFirstName: result.recordset[0].userFirstName,
+                        userLastName: result.recordset[0].userLastName,
+                        userUsername: result.recordset[0].userUsername,
+                        userPhone: result.recordset[0].userPhone,
+                        userBirthDay: result.recordset[0].userBirthDay,
+                        role: {
+                            roleId: result.recordset[0].roleID,
+                            roleName: result.recordset[0].roleName,
+                            roleDescription: result.recordset[0].roleDescription,
                         }
                     }
 
@@ -257,6 +307,7 @@ class User {
         });
     }
 
+    // POST (CREATE) stuff
     create(optionsObj){
         return new Promise((resolve, reject) => {
             (async () => {
@@ -338,6 +389,73 @@ class User {
             })();
         })
     }
+
+    //PUT (UPDATE) stuff
+    update(userObj){
+        return new Promise((resolve, reject) => {
+            (async () => {
+                try {
+                    console.log('we are here');
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('userID', sql.Int, userObj.userID)
+                    .input('userEmail', sql.NVarChar(50), userObj.userEmail)
+                    .input('userFirstName', sql.NVarChar(50), userObj.userFirstName)
+                    .input('userLastName', sql.NVarChar(50), userObj.userLastName)
+                    .input('userUsername', sql.NVarChar(50), userObj.userUsername)
+                    .input('userPhone', sql.NVarChar(50), userObj.userPhone)
+                    .input('userBirthDay', sql.NVarChar(50), userObj.userBirthDay)
+                    .query(`
+                            SELECT *
+                            FROM forexUser
+                            WHERE userID = @userID;
+                            
+                            UPDATE forexUser
+                            SET userEmail = @userEmail,
+                            userFirstName = @userFirstName,
+                            userLastName = @userLastName,
+                            userUsername = @userUsername,
+                            userPhone = @userPhone,
+                            userBirthDay = @userBirthDay
+                            WHERE userID = @userID
+                            
+                            `);
+
+                    console.log(result);
+                    if (!result.recordset[0]) throw {message: 'User not found. Not updated.'};
+                    
+                    const record = {
+                        //userId: result1.recordset[0].userID,
+                        userEmail: result.recordset[0].userEmail,
+                        userFirstName: result.recordset[0].userFirstName,
+                        userLastName: result.recordset[0].userLastName,
+                        userUsername: result.recordset[0].userUsername,
+                        userPhone: result.recordset[0].userPhone,
+                        userBirthDay: result.recordset[0].userBirthDay,
+                        role: {
+                        //     roleId: result2.recordset[0].roleID,
+                            roleName: result.recordset[0].roleName,
+                            roleDescription: result.recordset[0].roleDescription,
+                        }
+                    }
+                    
+
+                    const {error} = User.validate(record);
+                    if (error) throw error;
+
+                    resolve(new User(record));
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                sql.close();
+            })();
+        });
+    };
+
+    //DELETE (DELETE) stuff
+
+
 }
 
 

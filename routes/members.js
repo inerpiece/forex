@@ -7,7 +7,7 @@ const router = express.Router();
 
 // GET requests
 
-router.get('/:userId', async (req, res) => { //we need [auth, memeber] so that the user is logged in and at least a member
+router.get('/user/:userId', async (req, res) => { //we need [auth, memeber] so that the user is logged in and at least a member
     const paramsObject = {
         userId: req.params.userId
     }
@@ -21,15 +21,6 @@ router.get('/:userId', async (req, res) => { //we need [auth, memeber] so that t
         } catch (err) {
             res.status(404).send(JSON.stringify(err));
         }
-    }
-});
-
-router.get('/', async (req, res) => {
-    try {
-        const allMembers = await User.readAllMembers();
-        res.send(JSON.stringify(allMembers));
-    } catch (err) {
-        res.status(404).send(JSON.stringify(err));
     }
 });
 
@@ -78,8 +69,26 @@ router.post('/', async (req, res) => {
 
 // PUT requests
 
-router.put('/:userId', async (req, res) => {
+router.put('/user/:userId', async (req, res) => {
+    
+    const paramsObject = {
+        userId: req.params.userId
+    }
 
+    const {error} = User.validate(paramsObject);
+    if (error) {
+        res.status(400).send(JSON.stringify(error));
+    } else {
+        try {
+            console.log(req.body);
+            
+            const member = await User.update(req.body);
+            res.send(JSON.stringify(member));
+        } catch (err) {
+            res.status(418).send(JSON.stringify(error));
+        }
+    }
+    
 });
 
 module.exports = router;
