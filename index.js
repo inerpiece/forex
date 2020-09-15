@@ -1,6 +1,12 @@
 const express = require('express'); // requiring express so that we can use it
 const app = express(); //basic usage of express functionality
 
+const cors = require('cors');
+
+//require middleware
+const setJSON = require('./middleware/setResponseHeader');
+const auth = require('./middleware/authenticate');
+
 //requiring all routes below
 const members = require('./routes/members'); //member
 const moderators = require('./routes/moderators'); //mod
@@ -14,14 +20,17 @@ const memberComments = require('./routes/memberComments'); //member comment
 const moderatorComments = require('./routes/moderatorComments'); //mod comment
 const adminComments = require('./routes/adminComments'); //admin comment
 
+const login = require('./routes/login');
+
 const roles = require('./routes/roles'); //all roles
 
 
 
 //using middleware and others below
 app.use(express.json()); //renders all req.body in JSON format
+app.use(setJSON);
 
-
+app.use(cors());
 //using all routes below
 app.use('/api/members', members);
 app.use('/api/moderators', moderators);
@@ -36,6 +45,8 @@ app.use('/api/mod/comments', moderatorComments);
 app.use('/api/admin/comments', adminComments);
 
 app.use('/api/roles', roles);
+
+app.use('/api/login', login);
 
 
 const myPort = 8577;
