@@ -81,6 +81,7 @@ VALUES  ('Admin', 'Can do all sorts of shit'),
         ('Mod', 'Can do all sorts of shit but less than an Admin'),
         ('Member', 'Cant do shit')
 
+/*
 SELECT *
 FROM forexRole
 
@@ -88,7 +89,13 @@ INSERT INTO forexUser (userEmail, userFirstName, userLastName, userUsername)
 VALUES ('tony@gmail.com', 'Tony', 'Borne', 'toninator')
 
 SELECT *
+FROM forexPassword
+
+SELECT *
 FROM forexUser
+INNER JOIN forexPassword
+ON forexPassword.FK_userID = forexUser.userID
+
 
 INSERT INTO forexUserRole (FK_userID, FK_roleID)
 VALUES (1,1)
@@ -100,3 +107,4 @@ ON forexUser.userID = forexUserRole.FK_userID
 INNER JOIN forexRole
 ON forexRole.roleID = forexUser.userID
 
+*/

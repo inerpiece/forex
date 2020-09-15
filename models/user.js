@@ -120,8 +120,7 @@ class User {
             (async () =>{
                 try {
                     const pool = await sql.connect(con);
-
-                    const result = pool.request()
+                    const result = await pool.request()
                     .input('userEmail', sql.NVarChar(255), email)
                     .query(`SELECT *
                             FROM forexUser
@@ -173,15 +172,15 @@ class User {
                     .input('userUsername', sql.NVarChar(50), this.userUsername)
                     .input('userPhone', sql.Int, this.userPhone)
                     .input('userBirthDay', sql.NVarChar(50), this.userBirthDay)
-                    .input('hashedPassword', sql.Int, hashedPassword)
+                    .input('hashedPassword', sql.NVarChar(255), hashedPassword)
                     .query(`INSERT INTO forexUser (userEmail, userFirstName, userLastName, userUsername, userPhone, userBirthDay)
-                            VALUES (@userEmail, @userFirstName, @userLastName, @userUsername, @userPhone, @userBirthDay)
+                            VALUES (@userEmail, @userFirstName, @userLastName, @userUsername, @userPhone, @userBirthDay);
                     
                             SELECT userID, userEmail
                             FROM forexUser
                             WHERE forexUser.userID = SCOPE_IDENTITY();
                             
-                            INSERT INTO userPassword (FK_userID, hashedPassword)
+                            INSERT INTO forexPassword (FK_userID, hashPassword)
                             VALUES (SCOPE_IDENTITY(), @hashedPassword)`);
                     
                     console.log(result1);
