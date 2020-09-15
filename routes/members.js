@@ -5,7 +5,6 @@ const _ = require('lodash');
 const router = express.Router();
 
 // GET requests
-
 router.get('/:userId', async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
 
