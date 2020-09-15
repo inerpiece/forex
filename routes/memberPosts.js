@@ -23,10 +23,10 @@ router.post('/', async (req, res) => {
     const postWannabe = req.body;
 
     try {
-        const validatePost = Post.validate(postWannabe);
+        const validatePost = await Post.validate(postWannabe);
         if(validatePost.error) throw {statusCode: 400, message: validatePost.error};
 
-        const newPost = await new Post(postWannabe);
+        const newPost = await new Post(postWannabe).create(postWannabe);
         res.send(JSON.stringify(newPost));
         
     } catch (err) {

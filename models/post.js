@@ -58,14 +58,17 @@ class Post {
                     const pool = await sql.connect(con);
                     const result = await pool.request()
                         .input('postTitle', sql.NVarChar(255), this.postTitle)
-                        .input('postBody', sql.NVarChar(MAX), this.postBody)
+                        .input('postBody', sql.NVarChar(), this.postBody)
                         .input('postDate', sql.NVarChar(50), this.postDate)
                         .query(`INSERT INTO forexPost (postTitle, postBody, postDate)
                             VALUES (@postTitle, @postBody, @postDate)
                             
                             SELECT *
                             FROM forexPost
-                            WHERE forexPost.postID = SCOPE_IDENTITY();`);
+                            WHERE forexPost.postID = SCOPE_IDENTITY();
+                            
+                            INSERT INTO forexPost (FK_userID)
+                            VALUES (SCOPE_IDENTITY())`);
 
                     console.log(result);
 
@@ -102,7 +105,7 @@ class Post {
                     if (!err.statusCode) {
                         errorMessage = {
                             statusCode: 500,
-                            message: err + 'we are here'
+                            message: err + 'we are here tihi'
                         }
                     } else {
                         errorMessage = err;
