@@ -44,7 +44,7 @@ class User {
     static validateLoginInfoFormat(loginInfoObj){
         const schema = Joi.object({
             userEmail: Joi.string().email().max(255),
-            password: Joi.string().min(5).max(255),
+            password: Joi.string().max(255),
         })
         return schema.validate(loginInfoObj)
     }
@@ -74,9 +74,10 @@ class User {
                     if (!result.recordset[0]) throw {statusCode: 404, message: 'User not found'}
                     if (result.recordset[0].length > 1) throw {statusCode: 500, message: 'DB is corrupt'}
 
-                    const match = await bcrypt.compare(loginInfoObj.password, result.recordset[0].hashedPassword);
+                    const match = await bcrypt.compare(loginInfoObj.password, result.recordset[0].hashPassword);
+                    
                     if (!match) throw {statusCode: 404, message: 'User not found'};
-
+                    
                     const record = {
                         userId: result.recordset[0].userID,
                         userEmail: result.recordset[0].userEmail,
@@ -93,9 +94,11 @@ class User {
                     }
 
                     const { error } = User.validate(record);
+                    
                     if (error) throw {statusCode: 409, message: error};
 
                     resolve(new User(record));
+                    
 
                 } catch (err) {
                     console.log(err);
@@ -156,6 +159,102 @@ class User {
                 sql.close();
             })();
         })
+    }
+
+    static readById(userID){
+        return new Promise((resolve,reject) =>{
+            (async ()=>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('userID', sql.Int, userID)
+                    .query(`SELECT *
+                            FROM forexUser
+
+                            INNER JOIN forexUserRole
+                            ON forexUser.userID = forexUserRole.FK_userID
+
+                            INNER JOIN forexRole
+                            ON forexUserRole.FK_roleID = forexRole.roleID
+
+                            WHERE forexUser.userID = @userID`);
+                    
+                    console.log(result);
+                    if (!result.recordset[0]) throw {message: 'User doesnt exist'}
+
+                    const record = {
+                        //userId: result.recordset[0].userID,
+                        //userEmail: result.recordset[0].userEmail,
+                        userFirstName: result.recordset[0].userFirstName,
+                        //userLastName: result.recordset[0].userLastName,
+                        userUsername: result.recordset[0].userUsername,
+                        //userPhone: result.recordset[0].userPhone,
+                        userBirthDay: result.recordset[0].userBirthDay,
+                        role: {
+                            //roleId: result.recordset[0].roleID,
+                            roleName: result.recordset[0].roleName,
+                            //roleDescription: result.recordset[0].roleDescription,
+                        }
+                    }
+
+                    const {error} = User.validate(record);
+                    if (error) throw error;
+
+                    resolve(new User(record));
+
+                } catch (err) {
+                    console.log(err);
+                        reject(err);
+                }
+                sql.close();
+            })();
+        })
+    }
+
+    static readAllMembers(){
+        return new Promise((resolve, reject) =>{
+        (async ()=>{
+            try {
+                const pool = await sql.connect(con);
+                const result = await pool.request()
+                .query(`SELECT *
+                        FROM forexUser
+
+                        INNER JOIN forexUserRole
+                        ON forexUser.userID = forexUserRole.FK_userID
+
+                        INNER JOIN forexRole
+                        ON forexUserRole.FK_roleID = forexRole.roleID`);
+
+                const members = [];
+                result.recordset.forEach(record => {
+                    const memberInstance = {
+                        userId: record.userID,
+                        userEmail: record.userEmail,
+                        userFirstName: record.userFirstName,
+                        userLastName: record.userLastName,
+                        userUsername: record.userUsername,
+                        userPhone: record.userPhone,
+                        userBirthDay: record.userBirthDay,
+                        role: {
+                            roleId: record.roleID,
+                            roleName: record.roleName,
+                            roleDescription: record.roleDescription,
+                        }
+                    }
+                    const {error} = User.validate(memberInstance);
+                    if (error) throw error;
+
+                    members.push(new User(memberInstance));
+                });
+                resolve(members);
+            } catch (err) {
+                console.log(err);
+                reject(err);
+            }
+            sql.close();
+        })();
+        });
     }
 
     create(optionsObj){
