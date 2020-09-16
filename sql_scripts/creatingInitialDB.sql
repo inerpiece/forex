@@ -102,6 +102,10 @@ FROM forexPassword
 
 SELECT *
 FROM forexUser
+
+SELECT *
+FROM forexPost
+
 INNER JOIN forexPassword
 ON forexPassword.FK_userID = forexUser.userID
 

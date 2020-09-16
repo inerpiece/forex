@@ -7,51 +7,113 @@ const User = require('./user');
 
 class Post {
     constructor(postObj) {
+        this.postId = postObj.postId;
         this.postTitle = postObj.postTitle;
         this.postBody = postObj.postBody;
         this.postDate = postObj.postDate;
-        // user: {
-        //     this.userId = userObj.userId;
-        //     this.userEmail = userObj.userEmail;
-        //     this.userFirstName = userObj.userFirstName;
-        //     this.userLastName = userObj.userLastName;
-        //     this.userUsername = userObj.userUsername;
-        //     this.userPhone = userObj.userPhone;
-        //     this.userBirthDay = userObj.userBirthDay;
-        //     if (userObj.role) {
-        //         this.role = {};
-        //         this.role.Id = userObj.role.roleId;
-        //         this.role.roleName = userObj.role.roleName;
-        //         this.role.roleDescription = userObj.role.roleDescription;
-        //     }
-        // }
+        this.user = {};
+        this.user.userId = postObj.user.userId;
+        this.user.userUsername = postObj.user.userUsername;
+        //this.comments = [];
     }
 
     static validate(postObj) {
         const schema = Joi.object({
+            postId: Joi.number().integer().min(1),
             postTitle: Joi.string().max(255),
             postBody: Joi.string(),
-            postDate: Joi.string().max(50)
-            // user: Joi.object({
-            //     userId: Joi.number().integer().min(1),
-            //     userEmail: Joi.string().email().max(255),
-            //     userFirstName: Joi.string().max(50),
-            //     userLastName: Joi.string().max(50),
-            //     userUsername: Joi.string().max(50),
-            //     userPhone: Joi.number().integer(),
-            //     userBirthDay: Joi.string().max(50),
-            //     role: Joi.object({
-            //         roleId: Joi.number().integer().min(1),
-            //         roleName: Joi.string().max(50),
-            //         roleDescription: Joi.string().max(255),
-            //     })
-            // })
+            postDate: Joi.string().max(50),
+            user: Joi.object({
+                userId: Joi.number().integer().min(1),
+                userUsername: Joi.string().max(50)
+            })
         });
         return schema.validate(postObj);
     }
 
+    // GET (READ) posts
+    static readById(postId){
+        return new Promise((resolve, reject) => {
+            (async ()=>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('postID', sql.Int, postId)
+                    .query(`SELECT *
+                            FROM forexPost
+
+                            INNER JOIN forexUser
+                            ON forexUser.userID = forexPost.FK_userID
+
+                            WHERE forexPost.postID = @postID`);
+
+                    console.log(result);
+                    if (!result.recordset[0]) throw {message: 'Post doesnt exist'}
+
+                    const record = {
+                        postTitle: result.recordset[0].postTitle,
+                        postBody: result.recordset[0].postBody,
+                        postDate: result.recordset[0].postDate,
+                        user: {
+                            userUsername: result.recordset[0].userUsername
+                        }
+                    }
+
+                    const {error} = Post.validate(record);
+                    if (error) throw error;
+
+                    resolve(new Post(record));
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                sql.close();
+            })();
+        });
+    }
+
+    static readAllPosts(){
+        return new Promise((resolve, reject) => {
+            (async ()=>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .query(`SELECT *
+                            FROM forexPost
+                            
+                            INNER JOIN forexUser
+                            ON forexUser.userID = forexPost.FK_userID`);
+
+                    const posts = [];
+                    result.recordset.forEach(record => {
+                        const postInstance = {
+                            postId: record.postID,
+                            postTitle: record.postTitle,
+                            postBody: record.postBody,
+                            postDate: record.postDate,
+                            user: {
+                                userId: record.userID,
+                                userUsername: record.userUsername
+                            }
+                        }
+                        const {error} = Post.validate(postInstance);
+                        if (error) throw error;
+
+                        posts.push(new Post(postInstance));
+                    });
+
+                    resolve(posts);
+                } catch (err) {
+                    console.log(err);
+                reject(err);
+                }
+                sql.close();
+            })();
+        });
+    }
+
     // POST (CREATE) post
-    create(postTextObj) {
+    create() {
         return new Promise((resolve, reject) => {
             (async () => {
                 try {
@@ -60,42 +122,42 @@ class Post {
                         .input('postTitle', sql.NVarChar(255), this.postTitle)
                         .input('postBody', sql.NVarChar(), this.postBody)
                         .input('postDate', sql.NVarChar(50), this.postDate)
-                        .query(`INSERT INTO forexPost (postTitle, postBody, postDate)
-                            VALUES (@postTitle, @postBody, @postDate)
+                        .input('FK_userID', sql.Int, this.user.userId)
+                        .query(`INSERT INTO forexPost (postTitle, postBody, postDate, FK_userID)
+                            VALUES (@postTitle, @postBody, @postDate, @FK_userID)
                             
                             SELECT *
                             FROM forexPost
-                            WHERE forexPost.postID = SCOPE_IDENTITY();
-                            
-                            INSERT INTO forexPost (FK_userID)
-                            VALUES (SCOPE_IDENTITY())`);
+                            INNER JOIN forexUser
+                            ON forexPost.FK_userID = forexUser.userID
+                            WHERE postID = SCOPE_IDENTITY();
+                            `);
 
                     console.log(result);
 
-                    if (result.recordset.length != 1) throw { statusCode: 500, message: 'DB is corrupt from user.js' };
+                    if (result.recordset.length != 1) throw {
+                        statusCode: 500,
+                        message: 'DB is corrupt from user.js'
+                    };
 
                     const record = {
+                        postId: result.recordset[0].postID,
                         postTitle: result.recordset[0].postTitle,
                         postBody: result.recordset[0].postBody,
-                        postDate: result.recordset[0].postDate
-                        // user: {
-                        //     userId: result.recordset[0].userID,
-                        //     userEmail: result.recordset[0].userEmail,
-                        //     userFirstName: result.recordset[0].userFirstName,
-                        //     userLastName: result.recordset[0].userLastName,
-                        //     userUsername: result.recordset[0].userUsername,
-                        //     userPhone: result.recordset[0].userPhone,
-                        //     userBirthDay: result.recordset[0].userBirthDay,
-                        //     role: {
-                        //         roleId: result.recordset[0].roleID,
-                        //         roleName: result.recordset[0].roleName,
-                        //         roleDescription: result.recordset[0].roleDescription,
-                        //     }
-                        // }
+                        postDate: result.recordset[0].postDate,
+                        user: {
+                            userId: result.recordset[0].userID,
+                            userUsername: result.recordset[0].userUsername
+                        }
                     }
 
-                    const { error } = Post.validate(record);
-                    if (error) throw { statusCode: 409, message: error };
+                    const {
+                        error
+                    } = Post.validate(record);
+                    if (error) throw {
+                        statusCode: 409,
+                        message: error
+                    };
 
                     resolve(new Post(record));
 

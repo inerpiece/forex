@@ -391,24 +391,22 @@ class User {
     }
 
     //PUT (UPDATE) stuff
-    update(userObj){
+    update(){
         return new Promise((resolve, reject) => {
             (async () => {
                 try {
                     console.log('we are here');
                     const pool = await sql.connect(con);
                     const result = await pool.request()
-                    .input('userID', sql.Int, userObj.userID)
-                    .input('userEmail', sql.NVarChar(50), userObj.userEmail)
-                    .input('userFirstName', sql.NVarChar(50), userObj.userFirstName)
-                    .input('userLastName', sql.NVarChar(50), userObj.userLastName)
-                    .input('userUsername', sql.NVarChar(50), userObj.userUsername)
-                    .input('userPhone', sql.NVarChar(50), userObj.userPhone)
-                    .input('userBirthDay', sql.NVarChar(50), userObj.userBirthDay)
+                    .input('userID', sql.Int, this.userId)
+                    .input('userEmail', sql.NVarChar(50), this.userEmail)
+                    .input('userFirstName', sql.NVarChar(50), this.userFirstName)
+                    .input('userLastName', sql.NVarChar(50), this.userLastName)
+                    .input('userUsername', sql.NVarChar(50), this.userUsername)
+                    .input('userPhone', sql.Int, this.userPhone)
+                    .input('userBirthDay', sql.NVarChar(50), this.userBirthDay)
                     .query(`
-                            SELECT *
-                            FROM forexUser
-                            WHERE userID = @userID;
+                            
                             
                             UPDATE forexUser
                             SET userEmail = @userEmail,
@@ -419,7 +417,9 @@ class User {
                             userBirthDay = @userBirthDay
                             WHERE userID = @userID
                             
-                            `);
+                            SELECT *
+                            FROM forexUser
+                            WHERE userID = @userID;`);
 
                     console.log(result);
                     if (!result.recordset[0]) throw {message: 'User not found. Not updated.'};

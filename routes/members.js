@@ -11,7 +11,9 @@ router.get('/user/:userId', async (req, res) => { //we need [auth, memeber] so t
     const paramsObject = {
         userId: req.params.userId
     }
-    const {error} = User.validate(paramsObject);
+    const {
+        error
+    } = User.validate(paramsObject);
     if (error) {
         res.status(400).send(JSON.stringify(error));
     } else {
@@ -32,7 +34,10 @@ router.post('/', async (req, res) => {
 
     try {
         const validateUser = User.validate(userWannabe);
-        if(validateUser.error) throw {statusCode: 400, message: validateUser.error};
+        if (validateUser.error) throw {
+            statusCode: 400,
+            message: validateUser.error
+        };
 
         const validatePassword = User.validateLoginInfoFormat(passwordWannabe);
         if (validatePassword.error) throw {
@@ -70,25 +75,42 @@ router.post('/', async (req, res) => {
 // PUT requests
 
 router.put('/user/:userId', async (req, res) => {
-    
-    const paramsObject = {
-        userId: req.params.userId
+    try {
+        const paramsObject = {
+            userId: req.params.userId
+        }
+
+        const {error} = User.validate(paramsObject);
+        if (error) throw  {statusCode: 400, message: error};
+
+        const validatePayload = User.validate(req.body);
+        if (validatePayload.error) throw  {statusCode: 400, message: error};
+
+        const user = await User.readByIdAdmin(req.params.userId);
+
+        //console.log(`user: ${JSON.stringify(user)}`);
+        //console.log(`req.body: ${JSON.stringify(req.body)}`);
+        const updatedUserWannabe = _.merge(user, req.body);
+        //console.log(`updatedUserWannabe: ${JSON.stringify(updatedUserWannabe)}`);
+
+        const updatedUser = await updatedUserWannabe.update();
+
+        res.send(JSON.stringify(updatedUser));
+                    
+    } catch (err) {
+        let errorMessage;
+        if (!err.statusCode) {
+            errorMessage = {
+                statusCode: 500,
+                message: `This is an error: ${err}`
+            };
+        } else {
+            errorMessage = err;
+        }
+        res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
     }
 
-    const {error} = User.validate(paramsObject);
-    if (error) {
-        res.status(400).send(JSON.stringify(error));
-    } else {
-        try {
-            console.log(req.body);
-            
-            const member = await User.update(req.body);
-            res.send(JSON.stringify(member));
-        } catch (err) {
-            res.status(418).send(JSON.stringify(error));
-        }
-    }
-    
+
 });
 
 module.exports = router;

@@ -59,14 +59,20 @@ secretBtn.addEventListener('click', (e) => {
         }
     };
 
-    xhttp.open('GET', 'http://127.0.0.1:8577/api/users/protected');
+    xhttp.open('POST', 'http://127.0.0.1:8577/api/member/posts');
+    xhttp.setRequestHeader('Content-Type', 'application/json');
 
     if (myStorage.getItem('currentUser')){
         const {token} = JSON.parse(myStorage.getItem('currentUser'));
         xhttp.setRequestHeader('x-authentication-token', token);
     }
 
-    xhttp.send();
+    const payload = {
+        postTitle: "Test ",
+        postBody: "body",
+        postDate: "today"
+    }
+    xhttp.send(JSON.stringify(payload));
 });
 
 logoutBtn.addEventListener('click', (e) =>{

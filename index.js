@@ -32,11 +32,11 @@ app.use(setJSON);
 
 app.use(cors());
 //using all routes below
-app.use('/api/members', members);
+app.use('/api/members',[auth], members);
 app.use('/api/moderators', moderators);
 app.use('/api/admins', admins);
 
-app.use('/api/member/posts', memberPosts);
+app.use('/api/member/posts',[auth], memberPosts);
 app.use('/api/mod/posts', moderatorPosts);
 app.use('/api/admin/posts', adminPosts);
 
