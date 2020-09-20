@@ -43,8 +43,44 @@ router.post('/', async (req, res) => {
 
 // PUT requests
 
-router.put('/user/:userId', async (req, res) => {
-    
+router.put('/user/:userId', [auth, admin], async (req, res) => {
+    try {
+        //if(!(req.params.userId == req.user.userId)) throw {statusCode: 405, message: 'Cannot update other users'}
+        const paramsObject = {
+            userId: req.params.userId
+        }
+
+        const {error} = User.validate(paramsObject);
+        if (error) throw  {statusCode: 400, message: error};
+
+        const validatePayload = User.validate(req.body);
+        if (validatePayload.error) throw  {statusCode: 400, message: error};
+
+        const user = await User.readByIdAdmin(req.params.userId);
+
+        //console.log(`user: ${JSON.stringify(user)}`);
+        //console.log(`req.body: ${JSON.stringify(req.body)}`);
+        const updatedUserWannabe = _.merge(user, req.body);
+        //console.log(`updatedUserWannabe: ${JSON.stringify(updatedUserWannabe)}`);
+
+        const updatedUser = await updatedUserWannabe.update();
+
+        res.send(JSON.stringify(updatedUser));
+                    
+    } catch (err) {
+        let errorMessage;
+        if (!err.statusCode) {
+            errorMessage = {
+                statusCode: 500,
+                message: `This is an error: ${err}`
+            };
+        } else {
+            errorMessage = err;
+        }
+        res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
+    }
+
+
 });
 
 // DELETE requests
