@@ -455,6 +455,63 @@ class User {
 
     //DELETE (DELETE) stuff
 
+    delete(){
+        return new Promise((resolve, reject) => {
+            (async ()=>{
+            try {
+                const pool = await sql.connect(con);
+                const result = await pool.request()
+                .input('userID', sql.Int, this.userId)
+                .query(`SELECT *
+                        FROM forexUser
+                        INNER JOIN forexUserRole
+                        ON forexUser.userID = forexUserRole.FK_userID
+                        INNER JOIN forexRole
+                        ON forexUserRole.FK_roleID = forexRole.roleID
+                        WHERE forexUser.userID = @userID
+                        
+                        DELETE FROM forexUserRole
+                        WHERE FK_userID = @userID
+                        
+                        DELETE FROM forexPassword
+                        WHERE FK_userID = @userID
+                        
+                        DELETE FROM forexUser
+                        WHERE userID = @userID`);
+                
+                console.log(result);
+
+                if(result.recordset.length == 0) throw {statusCode: 404, message: "User not found"}
+                if(result.recordset.length > 1) throw {statusCode: 500, message: "Multiple IDs: DB is corrupt"}
+
+                const userWannabe = {
+                    userId: result.recordset[0].userID,
+                    userEmail: result.recordset[0].userEmail,
+                    userFirstName: result.recordset[0].userFirstName,
+                    userLastName: result.recordset[0].userLastName,
+                    userUsername: result.recordset[0].userUsername,
+                    userPhone: result.recordset[0].userPhone,
+                    userBirthDay: result.recordset[0].userBirthDay,
+                    role: {
+                        roleId: result.recordset[0].roleID,
+                        roleName: result.recordset[0].roleName,
+                        roleDescription: result.recordset[0].roleDescription,
+                    }
+                }
+
+                const {error} = User.validate(userWannabe);
+                if (error) throw error;
+
+                resolve(new User(userWannabe));
+
+            } catch (err) {
+                console.log(err);
+                    reject(err);
+            }
+            sql.close();
+            })();
+        });
+    }
 
 }
 

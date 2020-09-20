@@ -32,7 +32,7 @@ app.use(setJSON);
 
 app.use(cors());
 //using all routes below
-app.use('/api/members',[auth], members);
+app.use('/api/members',[auth], members); //put [auth] but not for the entire route, otherwise members cant sign up
 app.use('/api/moderators', moderators);
 app.use('/api/admins', admins);
 

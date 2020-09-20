@@ -2,6 +2,8 @@ const express = require('express');
 const Joi = require('joi');
 const User = require('../models/user');
 const _ = require('lodash');
+const auth = require('../middleware/authenticate');
+const admin = require('../middleware/permit');
 
 const router = express.Router();
 
@@ -47,8 +49,19 @@ router.put('/user/:userId', async (req, res) => {
 
 // DELETE requests
 
-router.delete('/user/:userId', async (req, res) => {
+router.delete('/user/:userId', [auth, admin], async (req, res) => {
+    const validateUserId = User.validate(req.params);
+    if(validateUserId.error) throw {statusCode: 400, message: validateUserId.error};
 
+    if(req.params.userId == req.user.userId) throw {statusCode: 405, message: 'Cannot delete yourself'}
+
+    const userToBeDeleted = await User.readByIdAdmin(req.params.userId);
+
+    if(userToBeDeleted.role.roleName == 'Admin') throw {statusCode: 405, message: 'Cannot delete other admins'}
+
+    const deletedUser = await userToBeDeleted.delete();
+
+    res.send(JSON.stringify(deletedUser));
 });
 
 module.exports = router;
