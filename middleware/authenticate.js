@@ -34,5 +34,4 @@ module.exports = async (req, res, next) => {
         }
         res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
     }
-    
 };
