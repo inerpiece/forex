@@ -78,3 +78,10 @@ secretBtn.addEventListener('click', (e) => {
 logoutBtn.addEventListener('click', (e) =>{
     myStorage.removeItem('currentUser');
 });
+
+/*
+const payload = {
+    commentBody: "body",
+    commentDate: "today"
+}
+*/

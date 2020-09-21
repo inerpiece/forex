@@ -100,8 +100,27 @@ VALUES ('tony@gmail.com', 'Tony', 'Borne', 'toninator')
 SELECT *
 FROM forexPassword
 
-SELECT *
+SELECT userID, roleName, roleID, userEmail
 FROM forexUser
+INNER JOIN forexUserRole
+ON forexUser.userID = forexUserRole.FK_userID
+INNER JOIN forexRole
+ON forexRole.roleID = forexUserRole.FK_roleID
+ORDER BY roleID ASC
+
+
+SELECT *
+FROM forexPost
+INNER JOIN forexUser
+ON forexPost.FK_userID = forexUser.userID
+
+SELECT *
+FROM forexComment
+INNER JOIN forexUser
+ON forexComment.FK_userID = forexUser.userID
+WHERE FK_postID = 12
+
+
 
 SELECT *
 FROM forexPost
@@ -120,4 +139,51 @@ ON forexUser.userID = forexUserRole.FK_userID
 INNER JOIN forexRole
 ON forexRole.roleID = forexUser.userID
 
+
+SELECT *
+FROM forexComment
+
+INNER JOIN forexUser
+ON forexUser.userID = forexComment.FK_userID
+
+INNER JOIN forexPost
+ON forexUser.userID = forexPost.FK_userID
+
 */
+
+
+/*TEST DATA*/
+
+/*Users*/
+
+INSERT INTO forexUser (userEmail, userFirstName, userLastName, userUsername, userPhone, userBirthDay)
+VALUES ('test01@test.com', 'TestUserFN01', 'TestUserLN01', 'user01', 12345678, 'Today'),
+        ('test02@test.com', 'TestUserFN02', 'TestUserLN02', 'user02', 12345678, 'Tomorrow'),
+        ('testMod@test.com', 'TestMod', 'TestMod', 'Mod01', 12345678, 'Tomorrow'),
+        ('testAdmin01@test.com', 'TestAdmin01', 'TestAdmin01', 'admin01', 12345678, 'everyday');
+
+/*Roles for users*/
+
+INSERT INTO forexUserRole (FK_userID, FK_roleID)
+VALUES (4, 3),
+       (5, 3),
+       (6, 2),
+       (7, 1)
+
+/*Posts*/
+
+INSERT INTO forexPost (postTitle, postBody, postDate, FK_userID)
+VALUES ('This is post title 01', 'post body 01', 'post date 01', 4),
+       ('This is post title 02', 'post body 02', 'post date 02', 4),
+       ('This is post title 03', 'post body 03', 'post date 03', 5),
+       ('This is post title 04', 'post body 04', 'post date 04', 6),
+       ('This is post title 05', 'post body 05', 'post date 05', 7),
+       ('This is post title 06', 'post body 06', 'post date 06', 7)
+
+/*Comments*/
+
+INSERT INTO forexComment (commentBody, commentDate, FK_userID, FK_postID)
+VALUES ('First comment', '21.09.2020', 4, 17),
+       ('2nd comment', '21.09.2020', 5, 17),
+       ('3rd comment', '21.09.2020', 6, 18),
+       ('4th comment', '21.09.2020', 6, 18)
