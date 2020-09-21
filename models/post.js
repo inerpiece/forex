@@ -5,6 +5,7 @@ const sql = require('mssql');
 // const crypt = require('../config/encrypt');
 const User = require('./user');
 
+
 class Post {
     constructor(postObj) {
         this.postId = postObj.postId;
@@ -51,6 +52,7 @@ class Post {
                     if (!result.recordset[0]) throw {message: 'Post doesnt exist'}
 
                     const record = {
+                        postId: result.recordset[0].postID,
                         postTitle: result.recordset[0].postTitle,
                         postBody: result.recordset[0].postBody,
                         postDate: result.recordset[0].postDate,
@@ -178,6 +180,110 @@ class Post {
             })();
 
         })
+    }
+
+    update(){
+        return new Promise((resolve, reject) => {
+            (async () => {
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('postID', sql.Int, this.postId)
+                    .input('postTitle', sql.NVarChar(255), this.postTitle)
+                    .input('postBody', sql.NVarChar(), this.postBody)
+                    .query(`UPDATE forexPost
+                            SET postTitle = @postTitle,
+                            postBody = @postBody
+                            WHERE postID = @postID
+                            
+                            SELECT *
+                            FROM forexPost
+                            INNER JOIN forexUser
+                            ON forexUser.userID = forexPost.FK_userID
+                            WHERE postID = @postID`);
+                    
+                    console.log(result);
+                    if (!result.recordset[0]) throw {message: 'Post not found. Not updated.'};
+
+                    const record = {
+                        postId: result.recordset[0].postID,
+                        postTitle: result.recordset[0].postTitle,
+                        postBody: result.recordset[0].postBody,
+                        postDate: result.recordset[0].postDate,
+                        user: {
+                            userId: result.recordset[0].userID,
+                            userUsername: result.recordset[0].userUsername
+                        }
+                    }
+
+                    const {error} = Post.validate(record);
+                    if (error) throw error;
+
+                    resolve(new Post(record));
+
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            sql.close()
+            })();
+        });
+    }
+
+    delete(){
+        return new Promise((resolve, reject) => {
+            (async () =>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('userID', sql.Int, this.userId)
+                    .input('postID', sql.Int, this.postId)
+                    .query(`SELECT *
+                            FROM forexPost
+                            INNER JOIN forexComment
+                            ON forexComment.FK_postID = forexPost.postID
+                            INNER JOIN forexUser
+                            ON forexUser.userID = forexPost.FK_userID
+                            WHERE postID = @postID
+                            
+                            DELETE FROM forexComment
+                            WHERE FK_postID = @postID
+
+                            DELETE FROM forexPost
+                            WHERE FK_userID = @userID
+
+                            DELETE FROM forexPost
+                            WHERE postID = @postID`);
+
+
+                    console.log(`This is the RESULT after deleteing a post: ${result}`);
+
+                    if(result.recordset.length == 0) throw {statusCode: 404, message: "Post not found"}
+                    //if(result.recordset.length > 1) throw {statusCode: 500, message: "Multiple POST IDs: DB is corrupt"}
+
+                    const postWannabe = {
+                        postId: result.recordset[0].postID,
+                        postTitle: result.recordset[0].postTitle,
+                        postBody: result.recordset[0].postBody,
+                        postDate: result.recordset[0].postDate,
+                        user: {
+                            userId: result.recordset[0].userID,
+                            userUsername: result.recordset[0].userUsername
+                        }
+                    }
+
+                    const {error} = Post.validate(postWannabe);
+                    if (error) throw error;
+
+                    resolve(new Post(postWannabe));
+
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            sql.close()
+            })();
+        });
     }
 }
 

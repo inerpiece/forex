@@ -5,6 +5,7 @@ const Comment = require('../models/comment');
 const Post = require('../models/post');
 const User = require('../models/user');
 const auth = require('../middleware/authenticate');
+const _ = require('lodash');
 const router = express.Router();
 
 // GET requests
@@ -22,9 +23,26 @@ router.get('/post/:postId', async (req, res) => {
     }
 });
 
+// router.get('/comment/:commentId', async (req, res) => {
+//     const paramsObject = {
+//         commentId: req.params.commentId
+//     }
+//     const {error} = Comment.validate(paramsObject);
+//     if (error){
+//         res.status(400).send(JSON.stringify(error));
+//     } else {
+//         try {
+//             const comment = await Comment.readById(req.params.commentId);
+//             res.send(JSON.stringify(comment));
+//         } catch (err) {
+//             res.status(404).send(JSON.stringify(err));
+//         }
+//     }
+// });
+
 // POST requests
 
-router.post('/post/:postId', [auth], async (req, res) => {
+router.post('/post/:postId', async (req, res) => {
     const commentWannabe = req.body;
     commentWannabe.user = {};
     commentWannabe.user.userId = req.user.userId;
@@ -51,5 +69,7 @@ router.post('/post/:postId', [auth], async (req, res) => {
             res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
     }
 });
+
+
 
 module.exports = router;

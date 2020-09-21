@@ -7,7 +7,7 @@ const router = express.Router();
 
 // GET requests
 
-router.get('/user/:userId', async (req, res) => { //we need [auth, memeber] so that the user is logged in and at least a member
+router.get('/user/:userId', [auth], async (req, res) => { //we need [auth, memeber] so that the user is logged in and at least a member
     const paramsObject = {
         userId: req.params.userId
     }
@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
 
 // PUT requests
 
-router.put('/user/:userId', async (req, res) => {
+router.put('/user/:userId', [auth], async (req, res) => {
     try {
         if(req.user.role.Id != 1){
             if(!(req.params.userId == req.user.userId)) throw {statusCode: 405, message: 'Cannot update other users'}

@@ -8,7 +8,7 @@ const User = require('./user');
 
 class Comment {
     constructor(commentObj){
-        this.commentId = commentObj.commentID,
+        this.commentId = commentObj.commentId,
         this.commentBody = commentObj.commentBody,
         this.commentDate = commentObj.commentDate,
 
@@ -52,7 +52,8 @@ class Comment {
 
                             WHERE forexComment.FK_postID = @postID
                             `);
-
+                    
+                            console.log(result);
                     const comments = [];
                     result.recordset.forEach(record => {
                         const commentInstance = {
@@ -72,8 +73,10 @@ class Comment {
 
                         comments.push(new Comment(commentInstance));
                     });
-
+                    
+                    
                     resolve(comments);
+                    
                 } catch (err) {
                     console.log(err);
                 reject(err);
@@ -89,7 +92,6 @@ class Comment {
                 try {
                     const pool = await sql.connect(con);
                     const result = await pool.request()
-                        
                         .input('commentBody', sql.NVarChar(), this.commentBody)
                         .input('commentDate', sql.NVarChar(50), this.commentDate)
                         .input('FK_userID', sql.Int, this.user.userId)
@@ -106,7 +108,7 @@ class Comment {
                             INNER JOIN forexPost
                             ON forexComment.FK_postID = forexPost.postID
 
-                            WHERE forexComment.commentID = SCOPE_IDENTITY();
+                            WHERE commentID = SCOPE_IDENTITY();
 
 
                             
@@ -164,10 +166,158 @@ class Comment {
         })
     }
 
-    delete(){
-        
-    };
+    static readById(commentId){
+        return new Promise((resolve, reject) =>{
+            (async () =>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('commentID', sql.Int, commentId)
+                    .query(`SELECT *
+                            FROM forexComment
+                            
+                            INNER JOIN forexUser
+                            ON forexUser.userID = forexComment.FK_userID
 
+                            INNER JOIN forexPost
+                            ON forexPost.postID = forexComment.FK_postID
+
+                            WHERE forexComment.commentID = @commentID`);
+
+                    console.log(result);
+                    if (!result.recordset[0]) throw {message: 'Comment doesnt exist'}
+
+                    const record = {
+                        commentId: result.recordset[0].commentID,
+                        commentBody: result.recordset[0].commentBody,
+                        commentDate: result.recordset[0].commentDate,
+                        user: {
+                            userId: result.recordset[0].userID,
+                            userUsername: result.recordset[0].userUsername
+                        },
+                        post: {
+                            postId: result.recordset[0].FK_postID
+                        }
+                    }
+                    const {error} = Comment.validate(record);
+                    if (error) throw error;
+
+                    resolve(new Comment(record));
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            sql.close()
+            })();
+        });
+    }
+
+
+    update(){
+        return new Promise((resolve, reject) => {
+            (async ()=>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('commentID', sql.Int, this.commentId)
+                    .input('commentBody', sql.NVarChar(), this.commentBody)
+                    .query(`UPDATE forexComment
+                            SET commentBody = @commentBody
+                            WHERE commentID = @commentID
+                            
+                            SELECT *
+                            FROM forexComment
+                            INNER JOIN forexUser
+                            ON forexUser.userID = forexComment.FK_userID
+                            INNER JOIN forexPost
+                            ON forexPost.postID = forexComment.FK_postID
+                            WHERE commentID = @commentID`);
+
+                    console.log(result);
+                    if (!result.recordset[0]) throw {message: 'Comment not found. Not updated.'};
+
+                    const record = {
+                        commentId: result.recordset[0].commentID,
+                        commentBody: result.recordset[0].commentBody,
+                        commentDate: result.recordset[0].commentDate,
+                        user: {
+                            userId: result.recordset[0].userID,
+                            userUsername: result.recordset[0].userUsername
+                        },
+                        post: {
+                            postId: result.recordset[0].FK_postID
+                        }
+                    }
+
+                    const {error} = Comment.validate(record);
+                    if (error) throw error;
+
+                    resolve(new Comment(record));
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            sql.close()
+            })();
+        });
+    }
+
+    delete(){
+        return new Promise((resolve, reject) => {
+            (async () =>{
+                try {
+                    const pool = await sql.connect(con);
+                    const result = await pool.request()
+                    .input('commentID', sql.Int, this.commentId)
+                    .input('userID', sql.Int, this.userId)
+                    .input('postID', sql.Int, this.postId)
+                    .query(`SELECT *
+                            FROM forexComment
+                            INNER JOIN forexUser
+                            ON forexUser.userID = forexComment.FK_userID
+                            INNER JOIN forexPost
+                            ON forexPost.postID = forexComment.FK_postID
+                            WHERE commentID = @commentID 
+                            
+                            DELETE FROM forexComment
+                            WHERE FK_userID = @userID
+                            
+                            DELETE FROM forexComment
+                            WHERE FK_postID = @postID
+                            
+                            DELETE FROM forexComment
+                            WHERE commentID = @commentID`);
+
+                    console.log(result);
+
+                    if(result.recordset.length == 0) throw {statusCode: 404, message: "Comment not found"}
+                    if(result.recordset.length > 1) throw {statusCode: 500, message: "Multiple comment IDs: DB is corrupt"}
+
+                    const commentWannabe = {
+                        commentId: result.recordset[0].commentID,
+                        commentBody: result.recordset[0].commentBody,
+                        commentDate: result.recordset[0].commentDate,
+                        user: {
+                            userId: result.recordset[0].userID,
+                            userUsername: result.recordset[0].userUsername
+                        },
+                        post: {
+                            postId: result.recordset[0].FK_postID
+                        }
+                    }
+
+                    const {error} = Comment.validate(commentWannabe);
+                    if (error) throw error;
+
+                    resolve(new Comment(commentWannabe));
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            sql.close()
+            })();
+        });
+    }
 }
 
 module.exports = Comment;

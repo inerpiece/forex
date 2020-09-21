@@ -2,8 +2,11 @@ const express = require('express');
 const Joi = require('joi');
 const sql = require('mssql');
 const Post = require('../models/post');
-
+const _ = require('lodash');
+const Comment = require('../models/comment');
 const User = require('../models/user');
+const auth = require('../middleware/authenticate');
+
 
 const router = express.Router();
 
@@ -66,5 +69,7 @@ router.post('/', async (req, res) => {
             res.status(errorMessage.statusCode).send(JSON.stringify(errorMessage));
     }
 });
+
+
 
 module.exports = router;

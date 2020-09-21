@@ -3,6 +3,10 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const crypt = require('../config/encrypt');
 const { jwtPrivateKey } = require('../config/encrypt');
+const Post = require('../models/post');
+const _ = require('lodash');
+const Comment = require('../models/comment');
+const auth = require('../middleware/authenticate');
 
 const router = express.Router();
 

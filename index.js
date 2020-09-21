@@ -6,6 +6,8 @@ const cors = require('cors');
 //require middleware
 const setJSON = require('./middleware/setResponseHeader');
 const auth = require('./middleware/authenticate');
+const admin = require('./middleware/permit');
+const mod = require('./middleware/permitMod');
 
 //requiring all routes below
 const members = require('./routes/members'); //member
@@ -33,16 +35,16 @@ app.use(setJSON);
 app.use(cors());
 //using all routes below
 app.use('/api/members', members); //put [auth] but not for the entire route, otherwise members cant sign up
-app.use('/api/moderators', moderators);
-app.use('/api/admins', admins);
+app.use('/api/moderators', [auth, mod], moderators);
+app.use('/api/admins', [auth, admin], admins);
 
-app.use('/api/member/posts',[auth], memberPosts);
-app.use('/api/mod/posts', moderatorPosts);
-app.use('/api/admin/posts', adminPosts);
+app.use('/api/member/posts', [auth], memberPosts);
+app.use('/api/mod/posts', [auth, mod], moderatorPosts);
+app.use('/api/admin/posts', [auth, admin], adminPosts);
 
-app.use('/api/member/comments', memberComments);
-app.use('/api/mod/comments', moderatorComments);
-app.use('/api/admin/comments', adminComments);
+app.use('/api/member/comments', [auth], memberComments);
+app.use('/api/mod/comments', [auth, mod], moderatorComments);
+app.use('/api/admin/comments', [auth, admin], adminComments);
 
 app.use('/api/roles', roles);
 

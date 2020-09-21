@@ -141,6 +141,15 @@ ON forexRole.roleID = forexUser.userID
 
 
 SELECT *
+FROM forexPost
+INNER JOIN forexUser
+ON forexUser.userID = forexPost.FK_userID
+INNER JOIN forexComment
+ON forexComment.FK_postID = forexPost.postID
+WHERE postID = 17
+
+
+SELECT *
 FROM forexComment
 
 INNER JOIN forexUser
