@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForumX Posts</title>
+    <link rel="stylesheet" href="./assets/css/forexStyles.css">
+    <script src="./assets/scripts/forexScript.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> <!--Pixel font-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"> <!--Montserrat font-->
+    <link href="https://fonts.googleapis.com/css2?family=Neuton:ital@1&display=swap" rel="stylesheet"> <!--Neuton highlight font-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> <!--Font awesome 4.7-->
+</head>
+<body class="postsScreen">
+    <header>
+        <nav>
+            <div><a href="posts.html">ForumX</a></div>
+            <div><a href="index.html">sign out</a></div>
+        </nav>
+    </header>
+    <main>
+        <section class="secondaryNav">
+            <div><a href="posts.html" class="borderActive">Posts</a></div>
+            <div><a href="profile.html">Profile</a></div>
+            <div><a href="users.html">All Users</a></div>
+        </section>
+        <section class="sectionMain">
+            <div class="cookieTray">
+                <div><a href="posts.html" class="">/posts</a></div>
+            </div>
+            <article class="mainBlock">
+                <div class="flex">
+                    <h1>Posts</h1>
+                    <h3 class="specialH3">Create Post</h3>
+                </div>
+                <section class="flex parentPostSection">
+                    <article class="postsPanel" id="postsPanel">
+                        <!--dynamically generated from DB-->
+                        <div class="post flex">
+                            <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                            <h3 id="">Post title</h3>
+                            <h3 id="">Username</h3>
+                            <h3 id="">08/15/2020</h3>
+                        </div>
+                        <div class="post flex">
+                            <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                            <h3 id="">Post title</h3>
+                            <h3 id="">Username</h3>
+                            <h3 id="">08/15/2020</h3>
+                        </div>
+                        <div class="post flex">
+                            <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                            <h3 id="">Post title</h3>
+                            <h3 id="">Username</h3>
+                            <h3 id="">08/15/2020</h3>
+                        </div>
+                        <div class="post flex">
+                            <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                            <h3 id="">Post title</h3>
+                            <h3 id="">Username</h3>
+                            <h3 id="">08/15/2020</h3>
+                        </div>
+                    </article>
+                    <article class="createPost">
+                        <form action="" class="flex">
+                            <input type="text" name="" id="" placeholder="Title">
+                            <textarea name="" id="" cols="30" rows="10" placeholder="Message"></textarea>
+                            <div class="btn" id="">Create Post</div>
+                        </form>
+                    </article>
+                </section>
+            </article>
+        </section>
+    </main>
+    <footer>
+        <div>Copyright 2020</div>
+    </footer>
+</body>
+</html>

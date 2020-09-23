@@ -1,0 +1,494 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
+    font-family: 'Neuton', serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+html {
+    /*font-size: 10px;*/
+}
+
+:root {
+    --primaryBGGrey: #191B20;
+    --sectionBGGrey: rgba(96,96,96,0.63);
+    --cookieGrey: rgba(29,29,31,0.59);
+    --btnGrey: #1E2023;
+    --btnGreyHover: #2d3035;
+    --phGrey: #B8B8B8;
+    --white: #fff;
+    --black: #000;
+    --btnGreen: #007019;
+    --btnRed: #7B0000;
+    --yellow: #F3F800;
+}
+
+/*COMMON STYLES*/
+
+body {
+    background-color: var(--primaryBGGrey);
+    color: var(--white);
+}
+
+header {
+    background-color: var(--primaryBGGrey);
+    border-bottom: 2px solid var(--white);
+    height: 7vh;
+}
+
+nav {
+    margin: 0 auto;
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav a {
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Press Start 2P', cursive;
+}
+
+footer {
+    background-color: var(--primaryBGGrey);
+    border-top: 2px solid var(--white);
+    height: 7vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+main {
+    min-height: 86vh;
+}
+
+.btn {
+    padding: 10px 25px;
+    text-align: center;
+    background-color: var(--btnGrey);
+    border-radius: 10px;
+    width: 250px;
+    border: 1px solid var(--white);
+    margin: 20px 0;
+    cursor: pointer;
+    box-shadow: 2px 2px 2px var(--black);
+}
+
+.column {
+    flex-direction: column;
+}
+
+.fxBetween {
+    justify-content: space-between;
+}
+
+.fxAround {
+    justify-content: space-around;
+}
+
+.delete {
+    border: 2px solid var(--btnRed);
+}
+.update {
+    border: 2px solid var(--btnGreen);
+}
+
+
+
+.btn:hover {
+    background-color: var(--btnGreyHover);
+}
+
+.flex {
+    display: flex;
+}
+
+h1 {
+    font-family: 'Press Start 2P', cursive;
+}
+
+a {
+    color: var(--white);
+    text-decoration: none;
+}
+
+a:hover {
+    border-bottom: 1px solid white;
+}
+
+form{
+    width: 100%;
+    background-color: var(--sectionBGGrey);
+    padding: 25px;
+    border-radius: 10px;
+}
+
+input, textarea {
+    background-color: var(--primaryBGGrey);
+    color: var(--phGrey);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--white);
+}
+
+.secondaryNav {
+    width: 85%;
+    margin: 25px auto;
+    border-radius: 10px;
+    background-color: var(--primaryBGGrey);
+    display: flex;
+    padding: 25px 2.5%;
+}
+
+.secondaryNav div {
+    margin-right: 50px;
+}
+
+.secondaryNav div a {
+    text-transform: uppercase;
+}
+
+.secondaryNav div a:hover {
+    border-bottom: 1px solid white;
+}
+
+.borderActive {
+    border-bottom: 1px solid white;
+}
+
+.cookieTray {
+    background-color: var(--cookieGrey);
+    border-radius: 10px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.cookieTray div {
+    margin-left: 2.5%;
+}
+
+.sectionMain {
+    width: 85%;
+    margin: 0 auto;
+    height: 65vh;
+    background-color: var(--sectionBGGrey);
+    border-radius: 10px;
+}
+
+.mainBlock {
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+}
+
+
+/*WELCOME SCREEN*/
+
+.welcomeScreen, .loginScreen, .registerScreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+}
+
+.welcomeScreen h1, .loginScreen h1 {
+    margin-bottom: 25%;
+}
+
+.welcomeScreen .btn {
+    margin: 20px;
+}
+
+/*LOGIN SCREEN*/
+
+.loginPanel {
+    width: 20%;
+}
+
+.loginScreen input {
+    display: flex;
+    width: 100%;
+}
+
+.loginScreen .btn, .registerPanel .btn {
+    width: 70%;
+    margin: 0 auto;
+}
+
+/*REGISTER SCREEN*/
+
+.registerPanel {
+    width: 20%;
+}
+
+.registerPanel input {
+    width: 100%;
+}
+
+.registerScreen h1 {
+    margin-bottom: 5%;
+}
+
+.registerScreen .flex {
+    flex-direction: column;
+}
+
+/*POSTS SCREEN*/
+
+.postsScreen main {
+    height: auto;
+    padding-bottom: 50px;
+}
+
+.postsScreen .sectionMain {
+    height: auto;
+    padding-bottom: 50px;
+    
+}
+
+.postsScreen {
+    background-color: var(--black);
+}
+
+.postsScreen h1, .specialH3 {
+    padding: 30px 0;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.postsScreen .mainBlock {
+    /*background-color: var(--sectionBGGrey);*/
+}
+
+.post {
+    background-color: var(--primaryBGGrey);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 5px;
+    justify-content: space-between;
+}
+
+.post:hover {
+    background-color: var(--btnGreyHover);
+    cursor: pointer;
+}
+
+.parentPostSection {
+    justify-content: space-between;
+    
+}
+
+.postsPanel {
+    width: 65%;
+    height: 100%;
+}
+
+.createPost {
+    width: 30%;
+}
+
+.createPost form {
+    flex-direction: column;
+}
+
+.createPost form:nth-child(2) {
+    height: 250px;
+    overflow-y: scroll;
+}
+
+.createPost .btn {
+    cursor: pointer;
+    border: 2px solid var(--btnGreen);
+    width: 50%;
+}
+
+.postsScreen div {
+    justify-content: space-between;
+}
+
+
+/*POST SCREEN*/
+
+.postScreen {
+    background-color: var(--black);
+}
+
+.postScreen .sectionMain {
+    height: auto;
+    padding-bottom: 50px;
+}
+
+.postScreen main {
+    height: auto;
+    padding-bottom: 50px;
+}
+
+.postScreen h1, .postScreen h2 {
+    padding: 30px 0;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.postBody {
+    background-color: var(--btnGrey);
+    min-height: 250px;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.commentBody {
+    background-color: var(--btnGrey);
+    min-height: 100px;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.postScreen .post {
+    margin: 0;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid var(--white);
+}
+
+.postScreen .post:hover {
+    background-color: var(--primaryBGGrey);
+    cursor: initial;
+}
+
+.postScreen .postBody, .postScreen .commentBody {
+    margin: 0;
+    border-radius: 0 0 10px 10px;
+}
+
+.comment {
+    margin-bottom: 15px;
+}
+
+/*PROFILE SCREEN*/
+
+.profileScreen {
+    background-color: var(--black);
+}
+
+.profileScreen main {
+    min-height: calc(86vh - 25px);
+}
+
+.profileScreen h1, .profileScreen h3 {
+    padding: 80px 0 30px 0;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.profileStaticInfo {
+    width: 90%;
+    
+}
+
+.profileScreen .fxBetween {
+    padding-bottom: 10px;
+}
+
+.infoPanel {
+    background-color: var(--btnGrey);
+    width: 75%;
+    padding: 25px;
+    border-radius: 10px;
+    /*border: 1px solid var(--btnGrey);*/
+}
+
+.panelArticle i {
+    margin-bottom: 5px;
+}
+
+.panelArticle i:hover {
+    color:var(--yellow);
+    cursor: pointer;
+}
+
+.profileScreen input {
+    padding: 5px;
+    width: 100%;
+}
+
+.panelArticle {
+    width: 50%;
+}
+
+.profileScreen .mainBlock {
+    justify-content: space-between;
+}
+
+.profileScreen .fa-5x {
+    font-size: 15rem;
+}
+
+.profileIconPanel {
+    width: 30%;
+    text-align: center;
+}
+
+.profileIconPanel h3 {
+    color: var(--yellow);
+}
+
+.specBtn {
+    justify-content: space-between;
+}
+
+.specBtn .btn {
+    width: 35%;
+}
+
+/* .individualStaticInfo {
+    padding-bottom: 5px;
+    width: 100%;
+} */
+
+
+/*ALL USERS SCREEN*/
+
+.usersScreen {
+    background-color: var(--black);
+}
+
+.usersScreen .mainBlock {
+    width: 100%;
+    padding-top: 80px;
+}
+
+.usersScreen main {
+    padding-bottom: 30px;
+}
+
+.usersScreen .sectionMain {
+    height: auto;
+    padding-bottom: 80px;
+}
+
+.usersScreen form {
+    background-color: transparent;
+    padding: 0;
+}
+
+.usersScreen form input {
+    width: 70%;
+}
+
+.usersScreen input {
+    margin-bottom: 0;
+    height: 55px;
+}
+
+.usersScreen .btn {
+    margin: 0;
+    width: 85px;
+}
+

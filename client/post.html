@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForumX Welcome</title>
+    <link rel="stylesheet" href="./assets/css/forexStyles.css">
+    <script src="./assets/scripts/forexScript.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> <!--Pixel font-->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"> <!--Montserrat font-->
+    <link href="https://fonts.googleapis.com/css2?family=Neuton:ital@1&display=swap" rel="stylesheet"> <!--Neuton highlight font-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"> <!--Font awesome 4.7-->
+</head>
+<body class="postScreen">
+    <header>
+        <nav>
+            <div><a href="posts.html">forumX</a></div>
+            <div><a href="index.html">sign out</a></div>
+        </nav>
+    </header>
+    <main>
+        <section class="secondaryNav">
+            <div><a href="posts.html">Posts</a></div>
+            <div><a href="profile.html">Profile</a></div>
+            <div><a href="users.html">All Users</a></div>
+        </section>
+        <section class="sectionMain">
+            <div>
+                <div class="cookieTray">
+                    <div><a href="posts.html">/posts</a></div>
+                    <div><a href="post.html">/post</a></div>
+                </div>
+            </div>
+            <section class="mainBlock">
+                <section><!--Post section-->
+                    <h1>Post Title</h1>
+                    <article class="">
+                        <div class="flex post">
+                            <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                            <h3 class="" id="">Username|Role</h3>
+                            <h3 class="" id="">Posted on: 10 Sept 2009</h3>
+                            <h3 class="" id="">ID: 4</h3>
+                            <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="postBody">
+                            <p class="" id="">Post body</p>
+                        </div>
+                    </article>
+                    <article class="hidden"><!--Hidden by default-->
+                        <div class="flex post">
+                            <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                            <h3 class="" id="">Username|Role</h3>
+                            <h3 class="" id="">Posted on: 10 Sept 2009</h3>
+                            <h3 class="" id="">ID: 4</h3>
+                            <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
+                        </div>
+                        <div class="flex column"> 
+                            <form action="" class="flex column">
+                                <input type="text" name="" id="" value="title">
+                                <textarea name="" id="" cols="30" rows="10">Post body</textarea>
+                                <div class="flex fxBetween">
+                                    <div class="btn delete" id="">Delete</div>
+                                    <div class="btn update" id="">Update</div>
+                                </div>
+                            </form>
+                        </div>
+                    </article>
+                </section>
+                <section><!--Comment section-->
+                    <h2>Comments</h2>
+                    <div class="oneComment">
+                        <article class="comment normalUserComment">
+                            <div class="post flex ">
+                                <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                                <h3 class="" id="">Username|Role</h3>
+                                <h3 class="" id="">Posted on: 10 Sept 2009</h3>
+                                <h3 class="" id="">ID: 4</h3>
+                                <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" id=""></i>
+                            </div>
+                            <div class="commentBody">
+                                <p class="" id="">Comment body</p>
+                            </div>
+                        </article>
+                        <article class="comment hidden adminUserComment" id=""> <!--Hidden by default-->
+                            <div class="post flex ">
+                                <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
+                                <h3 class="" id="">Username|Role</h3>
+                                <h3 class="" id="">Posted on: 10 Sept 2009</h3>
+                                <h3 class="" id="">ID: 4</h3>
+                                <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" id=""></i>
+                            </div>
+                            <div class="commentBody"> 
+                                <form action="" class="flex column">
+                                    <textarea name="" id="" cols="30" rows="10">Comment body</textarea>
+                                    <div class="flex fxBetween">
+                                        <div class="btn delete" id="">Delete</div>
+                                        <div class="btn update" id="">Update</div>
+                                    </div>
+                                </form>
+                            </div>
+                        </article>
+                    </div>
+                    
+                </section>
+                <section>
+                    <div>
+                        <form action="" class="flex column">
+                            <textarea name="" id="" cols="30" rows="10" placeholder="Write a comment"></textarea>
+                            <div class="flex fxBetween">
+                                <div class="btn update" id="">Leave a comment</div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </main>
+    <footer>
+        <div>Copyright 2020</div>
+    </footer>
+</body>
+</html>
+
