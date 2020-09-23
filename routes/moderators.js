@@ -23,6 +23,7 @@ router.get('/user/:userId', async (req, res) => { //we need [auth, memeber] so t
     } else {
         try {
             const user = await User.readById(req.params.userId);
+            //OMIT STUFF              -----------------------------------------------------------------------------------------
             res.send(JSON.stringify(user));
         } catch (err) {
             res.status(404).send(JSON.stringify(err));
@@ -80,30 +81,29 @@ router.post('/', async (req, res) => {
 
 router.put('/user/:userId', async (req, res) => {
     try {
-        if(req.user.role.Id != 1){
-            if(!(req.params.userId == req.user.userId)) throw {statusCode: 405, message: 'Cannot update other users'}
-        } else {
-            const paramsObject = {
-                userId: req.params.userId
-            }
-    
-            const {error} = User.validate(paramsObject);
-            if (error) throw  {statusCode: 400, message: error};
-    
-            const validatePayload = User.validate(req.body);
-            if (validatePayload.error) throw  {statusCode: 400, message: error};
-    
-            const user = await User.readByIdAdmin(req.params.userId);
-    
-            //console.log(`user: ${JSON.stringify(user)}`);
-            //console.log(`req.body: ${JSON.stringify(req.body)}`);
-            const updatedUserWannabe = _.merge(user, req.body);
-            //console.log(`updatedUserWannabe: ${JSON.stringify(updatedUserWannabe)}`);
-    
-            const updatedUser = await updatedUserWannabe.update();
-    
-            res.send(JSON.stringify(updatedUser));
+        if((req.user.role.Id != 1) && !(req.params.userId == req.user.userId)) throw {statusCode: 405, message: 'Cannot update other users'}
+        
+        const paramsObject = {
+            userId: req.params.userId
         }
+
+        const {error} = User.validate(paramsObject);
+        if (error) throw  {statusCode: 400, message: error};
+
+        const validatePayload = User.validate(req.body);
+        if (validatePayload.error) throw  {statusCode: 400, message: error};
+
+        const user = await User.readById(req.params.userId);
+
+        //console.log(`user: ${JSON.stringify(user)}`);
+        //console.log(`req.body: ${JSON.stringify(req.body)}`);
+        const updatedUserWannabe = _.merge(user, req.body);
+        //console.log(`updatedUserWannabe: ${JSON.stringify(updatedUserWannabe)}`);
+
+        const updatedUser = await updatedUserWannabe.update();
+
+        res.send(JSON.stringify(updatedUser));
+        
     } catch (err) {
         let errorMessage;
         if (!err.statusCode) {

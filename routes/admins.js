@@ -28,7 +28,7 @@ router.get('/user/:userId', async (req, res) => {
         res.status(400).send(JSON.stringify(error));
     } else {
         try {
-            const user = await User.readByIdAdmin(req.params.userId);
+            const user = await User.readById(req.params.userId);
             res.send(JSON.stringify(user));
         } catch (err) {
             res.status(404).send(JSON.stringify(err));
@@ -97,7 +97,7 @@ router.put('/user/:userId', [auth, admin], async (req, res) => {
         const validatePayload = User.validate(req.body);
         if (validatePayload.error) throw  {statusCode: 400, message: error};
 
-        const user = await User.readByIdAdmin(req.params.userId);
+        const user = await User.readById(req.params.userId);
 
         //console.log(`user: ${JSON.stringify(user)}`);
         //console.log(`req.body: ${JSON.stringify(req.body)}`);
