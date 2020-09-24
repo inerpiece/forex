@@ -426,7 +426,14 @@ input, textarea {
     width: 50%;
 }
 
+.profileScreen main {
+    padding-bottom: 20px;
+}
 
+.profileScreen .sectionMain {
+    height: auto;
+    padding-bottom: 20px;
+}
 
 .profileScreen .mainBlock {
     justify-content: space-between;
