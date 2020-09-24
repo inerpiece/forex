@@ -10,12 +10,13 @@ const postsPanel = document.getElementById('postsPanel');
 
 function populateUsername(){
     console.log(currentUser)
-    usernameHeader.innerHTML = currentUserObj.userUsername;
+    usernameHeader.innerHTML = `<a href="http://127.0.0.1:5500/client/profile.html">${currentUserObj.userUsername}</a>`;
 }
 populateUsername();
 
 logoutButton.addEventListener('click', (e) =>{
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('searchedUser');
 });
 
 function getPosts(){
@@ -56,3 +57,54 @@ function getPosts(){
 }
 
 window.onload = getPosts;
+
+const newDateYear = new Date().getUTCFullYear();
+const newDateMonth = new Date().getUTCMonth() +1;
+const newDateDay = new Date().getUTCDate();
+const newDate = `${newDateDay}/${newDateMonth}/${newDateYear}`;
+
+const forexPostTitle = document.getElementById('forexPostTitle');
+const forexPostBody = document.getElementById('forexPostBody');
+const forexPostBtn = document.getElementById('forexPostBtn');
+
+
+forexPostBtn.addEventListener('click', (e)=>{
+    e.preventDefault()
+
+    if(!(forexPostTitle.value && forexPostBody.value)){
+        alertBox.innerHTML = "Please insert title and message before posting!";
+        setTimeout(function () {
+            alertBox.innerHTML = alertBox.innerHTML.replace("Please insert title and message before posting!", "");  
+        }, 2000);
+    } else {
+        const xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200){
+                console.log('we are here in the fe')
+                alertBox.innerHTML = `Posting successful`;
+                const data = JSON.parse(xhttp.responseText);
+                console.log(data);
+                location.reload(); // forward to the actual post page
+            }
+            if(this.readyState == 4 && this.status >= 400){
+                alertBox.innerHTML = `Posting unsuccessful, error: ${this.status}`;
+            }
+        };
+        xhttp.open('POST', 'http://127.0.0.1:8577/api/member/posts');
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+
+        if (localStorage.getItem('currentUser')){
+            const {token} = JSON.parse(localStorage.getItem('currentUser'));
+            xhttp.setRequestHeader('x-authentication-token', token);
+        }
+
+        const payload = {
+            postTitle: forexPostTitle.value,
+            postBody: forexPostBody.value,
+            postDate: newDate
+        }
+
+        xhttp.send(JSON.stringify(payload));
+    }
+});

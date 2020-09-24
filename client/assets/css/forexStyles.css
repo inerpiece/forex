@@ -23,6 +23,7 @@ html {
     --btnGreen: #007019;
     --btnRed: #7B0000;
     --yellow: #F3F800;
+    --blue: #0090A4;
 }
 
 /*COMMON STYLES*/
@@ -44,6 +45,14 @@ header {
 
 .usernameHeader {
     margin-right: 50px;
+}
+
+.admin {
+    color: var(--btnGreen);
+}
+
+.mod {
+    color: var(--blue);
 }
 
 nav {

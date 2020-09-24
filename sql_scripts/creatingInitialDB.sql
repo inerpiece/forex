@@ -109,6 +109,12 @@ ON forexRole.roleID = forexUserRole.FK_roleID
 ORDER BY roleID ASC
 
 
+
+UPDATE forexUserRole
+SET FK_roleID = 2
+WHERE FK_userID = 13
+
+
 SELECT *
 FROM forexPost
 INNER JOIN forexUser

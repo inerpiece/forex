@@ -3,6 +3,12 @@ const infoBtn = document.querySelector('#infoBtn');
 const inputBtn = document.querySelector('#inputBtn');
 const usernameAvatar = document.getElementById('usernameAvatar');
 
+//const somethingValue = require('./forexUsers')
+
+//const userSearchValue = document.getElementById('userSearchValue');
+//const userSearchValueBtn = document.getElementById('userSearchValueBtn');
+const userProfileDetails = document.getElementById('userProfileDetails');
+
 btn.addEventListener('click', ()=>{
     if (infoBtn.classList.contains('hidden')){
         infoBtn.classList.remove('hidden');
@@ -23,7 +29,7 @@ const userDetails = document.getElementById('userDetails');
 
 
 function populateUsername(){
-    console.log(currentUser)
+    //console.log(currentUser)
     usernameHeader.innerHTML = `<a href="http://127.0.0.1:5500/client/profile.html">${currentUserObj.userUsername}</a>`;
 }
 populateUsername();
@@ -32,53 +38,59 @@ logoutButton.addEventListener('click', (e) =>{
     localStorage.removeItem('currentUser');
     localStorage.removeItem('searchedUser');
 });
-
-function getUserInfo(){
+const searchedUser = localStorage.getItem('searchedUser');
+console.log(searchedUser)
+const sUser = JSON.parse(searchedUser);
+console.log(sUser);
+function getSearchUser(){
     const xhttp = new XMLHttpRequest();
-
+    //console.log(`we are here, ${userSearchValue.value}`);
     xhttp.onreadystatechange = function (){
+        
         if (this.readyState == 4 && this.status == 200){
             const data = JSON.parse(this.responseText);
-            console.log(data);
+            
+            //console.log(data);
             infoBtn.innerHTML = `
                 <div class="flex fxBetween">
                     <h4 id="">First Name: </h4>
-                    <h4 id="">${data.userFirstName}</h4>
+                    <h4 id="">${sUser.userFirstName}</h4>
                 </div>
                 <div class="flex fxBetween">
                     <h4 id="">Last Name: </h4>
-                    <h4 id="">${data.userLastName}</h4>
+                    <h4 id="">${sUser.userLastName}</h4>
                 </div>
                 <div class="flex fxBetween">
                     <h4 id="">Email: </h4>
-                    <h4 id="">${data.userEmail}</h4>
+                    <h4 id="">${sUser.userEmail}</h4>
                 </div>
                 <div class="flex fxBetween">
                     <h4 id="">Phone Number: </h4>
-                    <h4 id="">${data.userPhone}</h4>
+                    <h4 id="">${sUser.userPhone}</h4>
                 </div>
                 <div class="flex fxBetween">
                     <h4 id="">Birthday: </h4>
-                    <h4 id="">${data.userBirthDay}</h4>
+                    <h4 id="">${sUser.userBirthDay}</h4>
                 </div>
                 <div class="flex fxBetween">
                     <h4 id="">Username: </h4>
-                    <h4 id="">${data.userUsername}</h4>
+                    <h4 id="">${sUser.userUsername}</h4>
                 </div>
             `;
-            usernameAvatar.innerHTML = `${data.userUsername}`;
+            usernameAvatar.innerHTML = `${sUser.userUsername}`;
+            //location.href = `http://127.0.0.1:5500/client/userProfile.html?${searchedUser.userId}`
             // can do any kind of DOM or other manipulation here with the data
         }
         if (this.readyState == 4 && this.status >= 400){
             const errorData = JSON.stringify(this.responseText);
-            console.log(errorData);
+            //console.log(errorData);
             // display it or do something useful with the error message, warn the user, etc...
         }
     }
 
-    console.log(currentUserObj.userId);
-
-    xhttp.open('GET', `http://127.0.0.1:8577/api/members/user/${currentUserObj.userId}`);
+    //console.log(currentUserObj.userId);
+    
+    xhttp.open('GET', `http://127.0.0.1:8577/api/members/user/${sUser.userId}`);
 
     if (localStorage.getItem('currentUser')){
         const {token} = JSON.parse(localStorage.getItem('currentUser'));
@@ -88,4 +100,5 @@ function getUserInfo(){
     xhttp.send();
 }
 
-window.onload = getUserInfo;
+window.onload = getSearchUser;
+
