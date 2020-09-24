@@ -29,8 +29,8 @@ class User {
             userFirstName: Joi.string().max(50),
             userLastName: Joi.string().max(50),
             userUsername: Joi.string().max(50),
-            userPhone: Joi.number().integer(),
-            userBirthDay: Joi.string().max(50),
+            userPhone: Joi.number().integer().allow(null),
+            userBirthDay: Joi.string().max(50).empty(""),
             role: Joi.object({
                 roleId: Joi.number().integer().min(1),
                 roleName: Joi.string().max(50),
@@ -128,7 +128,7 @@ class User {
                     .query(`SELECT *
                             FROM forexUser
                             WHERE userEmail = @userEmail`);
-                    console.log(result.recordset + "This is the length we are looking at");
+                    //console.log(result.recordset + "This is the length we are looking at");
                     if (result.recordset.length == 0) throw {statusCode: 404, message: "User not found"}
                     if (result.recordset.length > 1) throw {statusCode: 500, message: "DB is corrupt"}
                     
@@ -312,6 +312,7 @@ class User {
         return new Promise((resolve, reject) => {
             (async () => {
                 try {
+                    console.log(optionsObj);
                     const hashedPassword = await bcrypt.hash(optionsObj.password, crypt.saltRounds);
 
                     const pool = await sql.connect(con);

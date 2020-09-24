@@ -23,6 +23,7 @@ registerButton.addEventListener('click', (e)=>{
 
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
+                console.log('we are here in the fe')
                 alertBox.innerHTML = `Registering successful`;
                 const data = JSON.parse(xhttp.responseText);
                 console.log(data);
@@ -34,7 +35,6 @@ registerButton.addEventListener('click', (e)=>{
         };
         xhttp.open('POST', 'http://127.0.0.1:8577/api/members');
         xhttp.setRequestHeader('Content-Type', 'application/json');
-        xhttp.setRequestHeader('Access-Control-Allow-Origin', '*');
 
         if(registerPassword.value != registerPasswordConfirm.value) throw (alertBox.innerHTML = 'Password must match');
 
@@ -43,11 +43,10 @@ registerButton.addEventListener('click', (e)=>{
             userFirstName: registerFirstName.value,
             userLastName: registerLastName.value,
             userUsername: registerUsername.value,
-            userPhone: registerPhone.value,
+            userPhone: parseInt(registerPhone.value),
             userBirthDay: registerBirthday.value,
             password: registerPassword.value,
         }
-
-        xhttp.send(payload);
+        xhttp.send(JSON.stringify(payload));
     }
 });

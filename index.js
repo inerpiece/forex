@@ -29,15 +29,15 @@ const roles = require('./routes/roles'); //all roles
 
 
 //using middleware and others below
+app.use(cors());
 app.use(express.json()); //renders all req.body in JSON format
 app.use(setJSON);
 
-app.use(cors());
 
-app.use( (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next()
-})
+// app.use( (req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     next()
+// })
 
 
 //using all routes below

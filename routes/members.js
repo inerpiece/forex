@@ -20,7 +20,7 @@ router.get('/user/:userId', [auth], async (req, res) => { //we need [auth, memeb
         try {
             const user = await User.readById(req.params.userId);
             const limitedInfo = _.omit(user, ["userFirstName", "userLastName"]); //--------------------- OMIT STUFF----------------------------------------
-            res.send(JSON.stringify(limitedInfo));
+            res.send(JSON.stringify(user));
         } catch (err) {
             res.status(404).send(JSON.stringify(err));
         }
@@ -30,6 +30,7 @@ router.get('/user/:userId', [auth], async (req, res) => { //we need [auth, memeb
 // POST requests
 
 router.post('/', async (req, res) => {
+    console.log(req.body);
     const userWannabe = _.omit(req.body, 'password');
     const passwordWannabe = _.pick(req.body, 'password');
 
@@ -39,13 +40,13 @@ router.post('/', async (req, res) => {
             statusCode: 400,
             message: validateUser.error
         };
-
+        
         const validatePassword = User.validateLoginInfoFormat(passwordWannabe);
         if (validatePassword.error) throw {
             statusCode: 400,
             message: validatePassword.error
         };
-
+        
         const existingUser = await User.readUserByEmail(userWannabe.userEmail);
         throw {
             statusCode: 403,
@@ -60,6 +61,7 @@ router.post('/', async (req, res) => {
             //res.setHeader('Access-Control-Allow-Origin', '*')
             res.send(JSON.stringify(newUser));
         } catch (err) {
+            console.log(err);
             let errorMessage;
             if (!err.statusCode) {
                 errorMessage = {

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForumX Welcome</title>
     <link rel="stylesheet" href="./assets/css/forexStyles.css">
-    <script src="./assets/scripts/forexScript.js" defer></script>
+    <script src="./assets/scripts/forexProfile.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> <!--Pixel font-->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet"> <!--Montserrat font-->
     <link href="https://fonts.googleapis.com/css2?family=Neuton:ital@1&display=swap" rel="stylesheet"> <!--Neuton highlight font-->
@@ -15,7 +15,10 @@
     <header>
         <nav>
             <div><a href="posts.html">ForumX</a></div>
-            <div><a href="index.html">sign out</a></div>
+            <div class="flex">
+                <div class="usernameHeader" id="usernameHeader">Username</div>
+                <div id="logoutButton"><a href="index.html">sign out</a></div>
+            </div>
         </nav>
     </header>
     <main>
@@ -34,9 +37,9 @@
                     <h1>Details</h1>
                     <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true" id="btnMash"></i>
                     <div class="infoPanel">
-                        <div class="flex fxBetween userDetails">
+                        <div class="flex fxBetween userDetails" id="userDetails">
                             <div id="infoBtn" class="profileStaticInfo ">
-                                <div class="flex fxBetween">
+                               <!--  <div class="flex fxBetween">
                                     <h4 id="">First Name: </h4>
                                     <h4 id="">Tony</h4>
                                 </div>
@@ -59,8 +62,8 @@
                                 <div class="flex fxBetween">
                                     <h4 id="">Username: </h4>
                                     <h4 id="">ip</h4>
-                                </div>
-                            </div>
+                                </div>-->
+                            </div> 
                             
                         </div>
                         
