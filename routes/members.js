@@ -57,6 +57,7 @@ router.post('/', async (req, res) => {
             //save the user in the DB via the User.create(passwordObject)
             const newUser = await new User(userWannabe).create(passwordWannabe);
             //if all good, we send the new user back with res
+            //res.setHeader('Access-Control-Allow-Origin', '*')
             res.send(JSON.stringify(newUser));
         } catch (err) {
             let errorMessage;
@@ -97,7 +98,7 @@ router.put('/user/:userId', [auth], async (req, res) => {
         //console.log(`updatedUserWannabe: ${JSON.stringify(updatedUserWannabe)}`);
 
         const updatedUser = await updatedUserWannabe.update();
-
+        //res.setHeader('Access-Control-Allow-Origin', '*')
         res.send(JSON.stringify(updatedUser));
         
         

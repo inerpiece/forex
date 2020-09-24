@@ -33,6 +33,13 @@ app.use(express.json()); //renders all req.body in JSON format
 app.use(setJSON);
 
 app.use(cors());
+
+app.use( (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next()
+})
+
+
 //using all routes below
 app.use('/api/members', members); //put [auth] but not for the entire route, otherwise members cant sign up
 app.use('/api/moderators', [auth, mod], moderators);
