@@ -278,6 +278,10 @@ input, textarea {
     
 }
 
+.postsScreen .marginLeft {
+    margin-left: 180px;
+}
+
 .postsScreen {
     background-color: var(--black);
 }
@@ -289,6 +293,12 @@ input, textarea {
 
 .postsScreen .mainBlock {
     /*background-color: var(--sectionBGGrey);*/
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+    
 }
 
 .post {
@@ -354,9 +364,13 @@ input, textarea {
     padding-bottom: 50px;
 }
 
-.postScreen h1, .postScreen h2 {
+.postScreen h1, .postScreen h2, .postScreen h2 span {
     padding: 30px 0;
     font-family: 'Press Start 2P', cursive;
+}
+
+.postScreen h1 {
+    font-size: 2rem;
 }
 
 .postBody {

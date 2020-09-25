@@ -84,7 +84,8 @@ class Post {
                             FROM forexPost
                             
                             INNER JOIN forexUser
-                            ON forexUser.userID = forexPost.FK_userID`);
+                            ON forexUser.userID = forexPost.FK_userID
+                            ORDER BY postID DESC`);
 
                     const posts = [];
                     result.recordset.forEach(record => {

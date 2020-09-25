@@ -69,7 +69,7 @@ class User {
                             ON forexUserRole.FK_roleID = forexRole.roleID
 
                             WHERE forexUser.userEmail = @userEmail`);
-                    console.log(result);
+                    //console.log(result);
 
                     if (!result.recordset[0]) throw {statusCode: 404, message: 'User not found'}
                     if (result.recordset[0].length > 1) throw {statusCode: 500, message: 'DB is corrupt'}
@@ -229,7 +229,7 @@ class User {
 
                             WHERE forexUser.userID = @userID`);
                     
-                    console.log(result);
+                    //console.log(result);
                     if (!result.recordset[0]) throw {message: 'User doesnt exist'}
 
                     const record = {
@@ -312,7 +312,7 @@ class User {
         return new Promise((resolve, reject) => {
             (async () => {
                 try {
-                    console.log(optionsObj);
+                    //console.log(optionsObj);
                     const hashedPassword = await bcrypt.hash(optionsObj.password, crypt.saltRounds);
 
                     const pool = await sql.connect(con);
@@ -334,7 +334,7 @@ class User {
                             INSERT INTO forexPassword (FK_userID, hashPassword)
                             VALUES (SCOPE_IDENTITY(), @hashedPassword)`);
                     
-                    console.log(result1);
+                    //console.log(result1);
 
                     if (result1.recordset.length != 1) throw {statusCode: 500, message: 'DB is corrupt from user.js'};
 
@@ -349,7 +349,7 @@ class User {
                             INNER JOIN forexRole
                             ON forexUserRole.FK_roleID = forexRole.roleID
                             WHERE forexUserRole.FK_userID = @userID`);
-                    console.log(result2);
+                    //console.log(result2);
 
                     if (result2.recordset.length != 1) throw {statusCode: 500, message: 'DB is corrupt from user.js'};
 
@@ -422,7 +422,7 @@ class User {
                             FROM forexUser
                             WHERE userID = @userID;`);
 
-                    console.log(result);
+                    //console.log(result);
                     if (!result.recordset[0]) throw {message: 'User not found. Not updated.'};
                     
                     const record = {

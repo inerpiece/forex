@@ -129,12 +129,13 @@ router.put('/user/:userId', [auth, admin], async (req, res) => {
 router.delete('/user/:userId', [auth, admin], async (req, res) => {
     try {
         const validateUserId = User.validate(req.params);
+        
         if(validateUserId.error) throw {statusCode: 400, message: validateUserId.error};
-
+        
         if(req.params.userId == req.user.userId) throw {statusCode: 405, message: 'Cannot delete yourself'}
-
-        const userToBeDeleted = await User.readByIdAdmin(req.params.userId);
-
+        
+        const userToBeDeleted = await User.readById(req.params.userId);
+        console.log(req.params);
         if(userToBeDeleted.role.roleName == 'Admin') throw {statusCode: 405, message: 'Cannot delete other admins'}
 
         const deletedUser = await userToBeDeleted.delete();

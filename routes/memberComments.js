@@ -47,8 +47,8 @@ router.post('/post/:postId', async (req, res) => {
     commentWannabe.user = {};
     commentWannabe.user.userId = req.user.userId;
 
-    // commentWannabe.post = {};
-    // commentWannabe.post.postId = req.body.post.postId;
+    commentWannabe.post = {};
+    commentWannabe.post.postId = req.params.postId;
 
     try {
         const validateComment = await Comment.validate(commentWannabe);

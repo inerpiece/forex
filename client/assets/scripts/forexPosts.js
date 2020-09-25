@@ -9,7 +9,7 @@ const postsPanel = document.getElementById('postsPanel');
 
 
 function populateUsername(){
-    console.log(currentUser)
+    //console.log(currentUser)
     usernameHeader.innerHTML = `<a href="http://127.0.0.1:5500/client/profile.html">${currentUserObj.userUsername}</a>`;
 }
 populateUsername();
@@ -25,11 +25,11 @@ function getPosts(){
     xhttp.onreadystatechange = function (){
         if (this.readyState == 4 && this.status == 200){
             const data = JSON.parse(this.responseText);
-            console.log(data);
+            // console.log(data);
             data.forEach(data => {
-                console.log(data);
+                // console.log(data);
                postsPanel.innerHTML += `
-                <a href="http://127.0.0.1:5500/client/post.html?${data.postId}"><div id="${data.postId}" class="post flex">
+                <a href="http://127.0.0.1:5500/client/post.html?${data.postId}"><div id="${data.postId}" class="post flex grid">
                 <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
                 <h3 id="">${data.postTitle}</h3>
                 <h3 id="">${data.user.userUsername}</h3>
@@ -81,10 +81,10 @@ forexPostBtn.addEventListener('click', (e)=>{
 
         xhttp.onreadystatechange = function(){
             if (this.readyState == 4 && this.status == 200){
-                console.log('we are here in the fe')
+                // console.log('we are here in the fe')
                 alertBox.innerHTML = `Posting successful`;
                 const data = JSON.parse(xhttp.responseText);
-                console.log(data);
+                // console.log(data);
                 location.reload(); // forward to the actual post page
             }
             if(this.readyState == 4 && this.status >= 400){

@@ -9,7 +9,7 @@ const usersPanel = document.getElementById('usersPanel');
 
 
 function populateUsername(){
-    console.log(currentUser)
+    // console.log(currentUser)
     usernameHeader.innerHTML = `<a href="http://127.0.0.1:5500/client/profile.html">${currentUserObj.userUsername}</a>`;
 }
 populateUsername();
@@ -26,10 +26,10 @@ function getUsers(){
         
         if (this.readyState == 4 && this.status == 200){
             const data = JSON.parse(this.responseText);
-            console.log(data);
+            // console.log(data);
             data.forEach(data => {
                 if(data.role.roleName == 'Admin'){
-                    console.log(data);
+                    // console.log(data);
                     usersPanel.innerHTML += `
                     <a href=""><div class="flex post">
                     <i class="fa fa-user-o fa-2x admin" aria-hidden="true"></i>
@@ -37,7 +37,7 @@ function getUsers(){
                     <h3 id="" class="admin">ID: ${data.userId}</h3>
                     </div></a>`;
                 } else if (data.role.roleName == 'Mod') {
-                    console.log(data);
+                    // console.log(data);
                     usersPanel.innerHTML += `
                     <a href=""><div class="flex post">
                     <i class="fa fa-user-o fa-2x mod" aria-hidden="true"></i>
@@ -45,7 +45,7 @@ function getUsers(){
                     <h3 id="" class="mod">ID: ${data.userId}</h3>
                     </div></a>`;
                 } else {
-                    console.log(data);
+                    // console.log(data);
                     usersPanel.innerHTML += `
                     <a href=""><div class="flex post">
                     <i class="fa fa-user-o fa-2x" aria-hidden="true"></i>
@@ -94,7 +94,7 @@ const userProfileDetails = document.getElementById('userProfileDetails');
 
 function getSearchUser(){
     const xhttp = new XMLHttpRequest();
-    console.log(`we are here, ${userSearchValue.value}`);
+    // console.log(`we are here, ${userSearchValue.value}`);
     xhttp.onreadystatechange = function (){
         
         if (this.readyState == 4 && this.status == 200){

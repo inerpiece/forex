@@ -109,9 +109,6 @@ class Comment {
                             ON forexComment.FK_postID = forexPost.postID
 
                             WHERE commentID = SCOPE_IDENTITY();
-
-
-                            
                             `);
 
                             /*

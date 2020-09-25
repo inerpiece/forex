@@ -91,6 +91,15 @@ userPhone = @userPhone,
 userBirthDay = @userBirthDay,
 WHERE userID = @userID
 
+DELETE FROM forexUser
+INNER JOIN forexComment
+ON forexComment.FK_userID = forexUser.userID
+INNER JOIN forexPost
+ON forexPost.FK_userID = forexUser.userID
+INNER JOIN forexUserRole
+ON forexUserRole.FK_userID = forexUser.userID
+WHERE userID = 10
+
 SELECT *
 FROM forexRole
 
@@ -198,7 +207,7 @@ VALUES ('This is post title 01', 'post body 01', 'post date 01', 4),
 /*Comments*/
 
 INSERT INTO forexComment (commentBody, commentDate, FK_userID, FK_postID)
-VALUES ('First comment', '21.09.2020', 4, 17),
-       ('2nd comment', '21.09.2020', 5, 17),
-       ('3rd comment', '21.09.2020', 6, 18),
-       ('4th comment', '21.09.2020', 6, 18)
+VALUES ('First comment', '21.09.2020', 4, 29),
+       ('2nd comment', '21.09.2020', 5, 29),
+       ('3rd comment', '21.09.2020', 6, 29),
+       ('4th comment', '21.09.2020', 6, 29)

@@ -30,7 +30,7 @@ router.get('/user/:userId', [auth], async (req, res) => { //we need [auth, memeb
 // POST requests
 
 router.post('/', async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const userWannabe = _.omit(req.body, 'password');
     const passwordWannabe = _.pick(req.body, 'password');
 
