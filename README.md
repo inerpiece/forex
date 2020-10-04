@@ -18,24 +18,24 @@ Packs installed so far:
 [x] Moderator routes
 [x] Admin routes
 1.1 Defining purpose of routes
-[] Member routes
-[] Moderator routes
-[] Admin routes
+[x] Member routes
+[x] Moderator routes
+[x] Admin routes
 
 2. Creating Classes
-[] User
-[] Post
-[] Comment
+[x] User
+[x] Post
+[x] Comment
 
 3. index.js
-[] setup app
-[] link routes to app
+[x] setup app
+[x] link routes to app
 
 4. Middleware
-[] create mw for authing user roles
-[] create mw for authin if a user is logged in
+[x] create mw for authing user roles
+[x] create mw for authin if a user is logged in
 
 5. Front-end
-[] Create low-fi mockup
-[] Implement it with HTML, CSS, JS
-[] Connect to the custom API that will be built
+[x] Create low-fi mockup
+[x] Implement it with HTML, CSS, JS
+[x] Connect to the custom API that will be built
